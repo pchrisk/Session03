@@ -2,6 +2,7 @@ package edu.uw.ck;
 
 import java.io.Serializable;
 
+import edu.uw.ext.framework.account.AccountException;
 import edu.uw.ext.framework.order.Order;
 
 public interface Account extends Serializable {
@@ -86,35 +87,36 @@ public interface Account extends Serializable {
 	
 	/**
 	 * Sets the account email address.
-	 * @param email
+	 * @param email - the email address
 	 */
 	void setEmail(String email);
 	
 	
 	/**
 	 * Sets the full name of the account holder.
-	 * @param fullName
+	 * @param fullName - the account holders full name
 	 */
 	void setFullName(String fullName);
 	
 	
 	/**
 	 * Sets the account name.
-	 * @param acctName
+	 * @param acctName - the value to be set for the account name
+	 * @throws AccountException - if the account name is unacceptable
 	 */
-	void setName(String acctName);
+	void setName(String acctName) throws AccountException;
 	
 	
 	/**
 	 * Sets the hashed password.
-	 * @param passwordHash
+	 * @param passwordHash - the value to be st for the password hash
 	 */
 	void setPasswordHash(byte[] passwordHash);
 	
 	
 	/**
 	 * Sets the account phone number.
-	 * @param phone
+	 * @param phone - value for the account phone number
 	 */
 	void setPhone(String phone);
 	 
