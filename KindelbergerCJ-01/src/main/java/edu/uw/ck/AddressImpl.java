@@ -4,11 +4,19 @@ import edu.uw.ext.framework.account.Address;
 
 public class AddressImpl implements Address {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String city;
 	private String state;
 	private String streetAddress;
 	private String zipCode;
 
+	public AddressImpl(){
+		
+	}
+	
 	@Override
 	public String getCity() {		
 		return city;

@@ -4,12 +4,20 @@ import edu.uw.ext.framework.account.CreditCard;
 
 public class CreditCardImpl implements CreditCard {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String issuer;
 	private String type;
 	private String name;
 	private String accountNumber;
 	private String expDate;
 
+	public CreditCardImpl(){
+		
+	}
+	
 	@Override
 	public String getAccountNumber() {
 		return this.accountNumber;

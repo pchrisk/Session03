@@ -11,12 +11,12 @@ public class AccountFactoryImpl implements AccountFactory {
 		Account acct = null;
 		
 		try {
-			if(accountName != null && accountName.length() >= 8 && initialBalance >= 100000)  {
-				acct = new AccountImpl();
-				acct.setName(accountName);
-				acct.setPasswordHash(hashedPassword);
-				acct.setBalance(initialBalance);
-			}
+//			if(accountName != null && accountName.length() >= 8 && initialBalance >= 10000)  {
+				acct = new AccountImpl(accountName, hashedPassword, initialBalance);
+//				acct.setName(accountName);
+//				acct.setPasswordHash(hashedPassword);
+//				acct.setBalance(initialBalance);
+//			}
 				
 		} catch (AccountException e) {
 			// TODO Auto-generated catch block

@@ -1,5 +1,10 @@
 package edu.uw.ck;
 
+import java.util.logging.Logger;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.expression.AccessException;
+
 import edu.uw.ext.framework.account.Account;
 import edu.uw.ext.framework.account.AccountException;
 import edu.uw.ext.framework.account.AccountManager;
@@ -8,6 +13,8 @@ import edu.uw.ext.framework.account.CreditCard;
 import edu.uw.ext.framework.order.Order;
 
 public class AccountImpl implements Account {
+	
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(AccountImpl.class);
 
 	private Address address;
 	private int balance;
@@ -20,6 +27,14 @@ public class AccountImpl implements Account {
 	private Order order;
 	private int executionPrice;
 
+	public AccountImpl(String accountName, byte[] hashedPassword, int initialBalance) throws AccountException{
+		
+		setName(accountName);
+		setPasswordHash(hashedPassword);
+		setBalance(initialBalance);
+		
+	}
+	
 	@Override
 	public Address getAddress() {
 		return this.address;
@@ -81,7 +96,13 @@ public class AccountImpl implements Account {
 
 	@Override
 	public void setBalance(int balance) {
-		this.balance = balance;
+		
+		if(balance >= 10000){
+			this.balance = balance;
+		} else {
+			logger.error("Balance must be greater than 1000");
+		}
+		
 
 	}
 
@@ -105,7 +126,13 @@ public class AccountImpl implements Account {
 
 	@Override
 	public void setName(String acctName) throws AccountException {
-		this.acctName = acctName;
+		
+		if(acctName != null && acctName.length() >= 8)  {
+			this.acctName = acctName;
+		} else {
+			throw new AccountException(acctName + " does not meet the requirements for an account name."); 
+		}
+		
 
 	}
 
