@@ -8,8 +8,8 @@ public class AccountManagerFactoryImpl implements AccountManagerFactory {
 
 	@Override
 	public AccountManager newAccountManager(AccountDao dao) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return (new AccountManagerImpl(dao));
 	}
 
 }

@@ -26,12 +26,17 @@ public class AccountImpl implements Account {
 	private String phone;
 	private Order order;
 	private int executionPrice;
+	private AccountManager acctMgr;
 
 	public AccountImpl(String accountName, byte[] hashedPassword, int initialBalance) throws AccountException{
 		
-		setName(accountName);
-		setPasswordHash(hashedPassword);
-		setBalance(initialBalance);
+		if(accountName != null && accountName.length() >= 8 && initialBalance >= 100000)  {
+			setName(accountName);
+			setPasswordHash(hashedPassword);
+			setBalance(initialBalance);
+		} else {
+			throw new AccountException();
+		}
 		
 	}
 	
@@ -79,12 +84,21 @@ public class AccountImpl implements Account {
 	public void reflectOrder(Order order, int executionPrice) {
 		this.order = order;
 		this.executionPrice = executionPrice;
+		this.setBalance(this.getBalance() + this.executionPrice);
+		try {
+			this.acctMgr.persist(this);
+		} catch (AccountException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public void registerAccountManager(AccountManager m) {
-		// TODO Auto-generated method stub
+		if(this.acctMgr != null) {
+			this.acctMgr = m;
+		}
 
 	}
 
@@ -96,14 +110,8 @@ public class AccountImpl implements Account {
 
 	@Override
 	public void setBalance(int balance) {
+		this.balance = balance;
 		
-		if(balance >= 10000){
-			this.balance = balance;
-		} else {
-			logger.error("Balance must be greater than 1000");
-		}
-		
-
 	}
 
 	@Override

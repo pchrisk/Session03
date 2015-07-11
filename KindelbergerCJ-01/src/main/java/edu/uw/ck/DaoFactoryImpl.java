@@ -8,9 +8,9 @@ public class DaoFactoryImpl implements DaoFactory {
 
 	@Override
 	public AccountDao getAccountDao() throws DaoFactoryException {
-		new AccountDaoImpl();
 		
-		return null;
+		
+		return (new AccountDaoImpl());
 	}
 
 }

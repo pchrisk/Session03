@@ -6,12 +6,20 @@ import java.security.NoSuchAlgorithmException;
 import edu.uw.ext.framework.account.Account;
 import edu.uw.ext.framework.account.AccountException;
 import edu.uw.ext.framework.account.AccountManager;
+import edu.uw.ext.framework.dao.AccountDao;
 
 public class AccountManagerImpl implements AccountManager {
+	
+	private AccountDao dao = null;
+	
+	public AccountManagerImpl(AccountDao dao) {
+		this.dao = dao;
+//		AccountFactoryImpl acct = new AccountFactoryImpl();
+	}
 
 	@Override
 	public void close() throws AccountException {
-		// TODO Auto-generated method stub
+		dao.close();
 
 	}
 
@@ -47,19 +55,19 @@ public class AccountManagerImpl implements AccountManager {
 
 	@Override
 	public void deleteAccount(String accountName) throws AccountException {
-		// TODO Auto-generated method stub
+		dao.deleteAccount(accountName);
 
 	}
 
 	@Override
 	public Account getAccount(String accountName) throws AccountException {
-		// TODO Auto-generated method stub
-		return null;
+		Account acct = dao.getAccount(accountName);
+		return acct;
 	}
 
 	@Override
 	public void persist(Account account) throws AccountException {
-		// TODO Auto-generated method stub
+		dao.setAccount(account);
 
 	}
 
