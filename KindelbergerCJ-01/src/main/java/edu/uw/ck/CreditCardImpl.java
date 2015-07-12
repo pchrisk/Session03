@@ -4,9 +4,7 @@ import edu.uw.ext.framework.account.CreditCard;
 
 public class CreditCardImpl implements CreditCard {
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private String issuer;
 	private String type;

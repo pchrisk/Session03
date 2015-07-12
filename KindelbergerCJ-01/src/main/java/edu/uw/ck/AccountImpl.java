@@ -13,8 +13,9 @@ import edu.uw.ext.framework.account.CreditCard;
 import edu.uw.ext.framework.order.Order;
 
 public class AccountImpl implements Account {
-	
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(AccountImpl.class);
+
+	private static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(AccountImpl.class);
 
 	private Address address;
 	private int balance;
@@ -28,18 +29,20 @@ public class AccountImpl implements Account {
 	private int executionPrice;
 	private AccountManager acctMgr;
 
-	public AccountImpl(String accountName, byte[] hashedPassword, int initialBalance) throws AccountException{
-		
-		if(accountName != null && accountName.length() >= 8 && initialBalance >= 100000)  {
+	public AccountImpl(String accountName, byte[] hashedPassword,
+			int initialBalance) throws AccountException {
+
+		if (accountName != null && accountName.length() >= 8
+				&& initialBalance >= 100000) {
 			setName(accountName);
 			setPasswordHash(hashedPassword);
 			setBalance(initialBalance);
 		} else {
 			throw new AccountException();
 		}
-		
+
 	}
-	
+
 	@Override
 	public Address getAddress() {
 		return this.address;
@@ -96,7 +99,7 @@ public class AccountImpl implements Account {
 
 	@Override
 	public void registerAccountManager(AccountManager m) {
-		if(this.acctMgr != null) {
+		if (this.acctMgr != null) {
 			this.acctMgr = m;
 		}
 
@@ -111,7 +114,7 @@ public class AccountImpl implements Account {
 	@Override
 	public void setBalance(int balance) {
 		this.balance = balance;
-		
+
 	}
 
 	@Override
@@ -134,13 +137,13 @@ public class AccountImpl implements Account {
 
 	@Override
 	public void setName(String acctName) throws AccountException {
-		
-		if(acctName != null && acctName.length() >= 8)  {
+
+		if (acctName != null && acctName.length() >= 8) {
 			this.acctName = acctName;
 		} else {
-			throw new AccountException(acctName + " does not meet the requirements for an account name."); 
+			throw new AccountException(acctName
+					+ " does not meet the requirements for an account name.");
 		}
-		
 
 	}
 

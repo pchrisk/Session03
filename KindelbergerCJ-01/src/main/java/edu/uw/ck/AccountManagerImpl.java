@@ -1,5 +1,6 @@
 package edu.uw.ck;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -9,12 +10,11 @@ import edu.uw.ext.framework.account.AccountManager;
 import edu.uw.ext.framework.dao.AccountDao;
 
 public class AccountManagerImpl implements AccountManager {
-	
+
 	private AccountDao dao = null;
-	
+
 	public AccountManagerImpl(AccountDao dao) {
 		this.dao = dao;
-//		AccountFactoryImpl acct = new AccountFactoryImpl();
 	}
 
 	@Override
@@ -24,14 +24,16 @@ public class AccountManagerImpl implements AccountManager {
 	}
 
 	@Override
-	public Account createAccount(String accountName, String password, int balance)
-			throws AccountException {
+	public Account createAccount(String accountName, String password,
+			int balance) throws AccountException {
+		if (dao.getAccount(accountName) != null)
+			throw new AccountException("Account already exists");
+
 		byte[] hashedPassword = writeHash(password);
-		System.out.println(password);
-		System.out.println(hashedPassword);
-		
-		Account acct = new AccountFactoryImpl().newAccount(accountName, hashedPassword, balance);
-		
+		Account acct = new AccountFactoryImpl().newAccount(accountName,
+				hashedPassword, balance);
+		acct.registerAccountManager(this);
+		persist(acct);
 		return acct;
 	}
 
@@ -40,17 +42,19 @@ public class AccountManagerImpl implements AccountManager {
 		byte[] hashedPassword = null;
 		try {
 			md = MessageDigest.getInstance("SHA1");
-			md.update(password.getBytes());
-			hashedPassword = md.digest();		
-			
+			md.update(password.getBytes("UTF-8"));
+			hashedPassword = md.digest();
+
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-		
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return hashedPassword;
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -75,17 +79,17 @@ public class AccountManagerImpl implements AccountManager {
 	public boolean validateLogin(String accountName, String password)
 			throws AccountException {
 		Boolean isValid = false;
-		
-		
+
 		Account acct = getAccount(accountName);
+		if (acct == null) {
+			return isValid;
+		}
+
 		byte[] passwd1 = writeHash(password);
 		byte[] passwd2 = acct.getPasswordHash();
-		
-		if (passwd1.equals(passwd2)) {
-			isValid = true;
-		}
-			
-		
+
+		isValid = MessageDigest.isEqual(passwd1, passwd2);
+
 		return isValid;
 	}
 
