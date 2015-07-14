@@ -28,6 +28,10 @@ public class AccountImpl implements Account {
 	private Order order;
 	private int executionPrice;
 	private AccountManager acctMgr;
+	
+	public AccountImpl(){
+		
+	}
 
 	public AccountImpl(String accountName, byte[] hashedPassword,
 			int initialBalance) throws AccountException {
