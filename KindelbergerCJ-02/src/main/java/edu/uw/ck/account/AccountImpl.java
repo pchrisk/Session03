@@ -1,4 +1,4 @@
-package edu.uw.ck;
+package edu.uw.ck.account;
 
 import java.util.logging.Logger;
 

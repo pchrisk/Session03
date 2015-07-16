@@ -1,4 +1,4 @@
-package edu.uw.ck;
+package edu.uw.ck.account;
 
 import edu.uw.ext.framework.account.CreditCard;
 

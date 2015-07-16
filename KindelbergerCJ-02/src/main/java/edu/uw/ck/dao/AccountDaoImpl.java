@@ -1,4 +1,4 @@
-package edu.uw.ck;
+package edu.uw.ck.dao;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import edu.uw.ck.account.AccountFactoryImpl;
+import edu.uw.ck.account.AddressImpl;
+import edu.uw.ck.account.CreditCardImpl;
 import edu.uw.ext.framework.account.Account;
 import edu.uw.ext.framework.account.AccountException;
 import edu.uw.ext.framework.account.AccountFactory;

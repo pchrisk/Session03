@@ -6,7 +6,7 @@
   <groupId>edu.uw.ck</groupId>
   <artifactId>cp130</artifactId>
   <packaging>jar</packaging>
-  <version>01</version>
+  <version>02</version>
   <name>cp130</name>
 
   <properties>
