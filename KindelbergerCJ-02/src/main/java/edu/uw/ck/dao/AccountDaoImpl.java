@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.uw.ck.account.AccountFactoryImpl;
 import edu.uw.ck.account.AddressImpl;
 import edu.uw.ck.account.CreditCardImpl;
@@ -19,14 +22,17 @@ import edu.uw.ext.framework.account.Address;
 import edu.uw.ext.framework.account.CreditCard;
 import edu.uw.ext.framework.dao.AccountDao;
 
+
 public class AccountDaoImpl implements AccountDao {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AccountDaoImpl.class);
 
 	String ACCOUNT_FILES = "target/accounts/";
 	String ACCOUNT_FILENAME = "account.bin";
 	String ADDRESS_FILENAME = "address.prop";
 	String CREDITCARD_FILENAME = "creditcard.prop";
 
-	public AccountDaoImpl() {
+	public AccountDaoImpl() throws AccountException {
 		File dir = new File(ACCOUNT_FILES);
 		if (!dir.exists()) {
 			dir.mkdirs();
