@@ -22,12 +22,12 @@ public final class AccountFactoryImpl implements AccountFactory {
 			acct = new AccountImpl(accountName, hashedPassword, initialBalance);
 			
 			if (logger.isInfoEnabled()) {
-				logger.info("Created account: '%s', balance = %d", 
-						accountName, initialBalance);
+				logger.info(String.format("Created account: '%s', balance = %d", 
+						accountName, initialBalance));
 			}
 
 		} catch (AccountException e) {
-			final String msg = String.format("Account creation failed for, account '%s, balance = %d", 
+			final String msg = String.format("Account creation failed for, account '%s', balance = %d", 
 					accountName, initialBalance);
 			logger.warn(msg, e);
 			

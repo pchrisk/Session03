@@ -76,28 +76,28 @@ public class AccountDaoImplJson implements AccountDao {
 		File dir = new File(dirName);
 		if (dir.exists()) {
 			File file = new File(dirName, acctName + ".json");
-			
-			SimpleModule module = new SimpleModule();
-			module.addAbstractTypeMapping(Account.class, AccountImpl.class);
-			module.addAbstractTypeMapping(Address.class, AddressImpl.class);
-			module.addAbstractTypeMapping(CreditCard.class, CreditCardImpl.class);
-			
-			mapper.registerModule(module);
-			
-			try {
-				account = mapper.readValue(file, AccountImpl.class);
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(file.exists()) {
+				SimpleModule module = new SimpleModule();
+				module.addAbstractTypeMapping(Account.class, AccountImpl.class);
+				module.addAbstractTypeMapping(Address.class, AddressImpl.class);
+				module.addAbstractTypeMapping(CreditCard.class, CreditCardImpl.class);
+				
+				mapper.registerModule(module);
+				
+				try {
+					account = mapper.readValue(file, AccountImpl.class);
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			
-			
+						
 		} else {
 			return null;
 		}
