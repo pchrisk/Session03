@@ -23,4 +23,7 @@
   <!-- Bean providing implementation of edu.uw.ext.framework.account.DaoFactory -->
   <bean id="DaoFactory" class="edu.uw.ck.dao.DaoFactoryImplJson"/>
   
+  <!-- Bean implementing edu.uw.ext.framework.broker.BrokerFactory -->
+  <bean id="BrokerFactory" class="edu.uw.ck.broker.BrokerFactoryImpl"/>
+  
 </beans>
