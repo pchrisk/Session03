@@ -13,6 +13,10 @@ public class OrderManagerImpl implements OrderManager {
 	
 	private static Logger logger = LoggerFactory.getLogger(OrderManagerImpl.class);
 
+	public OrderManagerImpl(String ticker, int initPrice) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void adjustPrice(int arg0) {
 		// TODO Auto-generated method stub
