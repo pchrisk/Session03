@@ -15,7 +15,7 @@ import edu.uw.ext.framework.order.StopSellOrder;
 /*****************************************************************************
  * Replace these imports with the import of your implementing classes.       *
  *****************************************************************************/
-import edu.uw.ck.broker.SimpleOrderQueue;
+import edu.uw.ck.broker.OrderQueueImpl;
 import edu.uw.ck.broker.StopBuyOrderComparator;
 import edu.uw.ck.broker.StopSellOrderComparator;
 
@@ -40,7 +40,7 @@ public class OrderQueueTest extends AbstractOrderQueueTest {
         /*********************************************************************
          * This needs to be an instance of your OrderQueue and Comparator.   *
          *********************************************************************/
-        return new SimpleOrderQueue<StopBuyOrder>(new StopBuyOrderComparator(), filter);
+        return new OrderQueueImpl<StopBuyOrder>(new StopBuyOrderComparator(), filter);
     }
 
     /**
@@ -57,7 +57,7 @@ public class OrderQueueTest extends AbstractOrderQueueTest {
         /*********************************************************************
          * This needs to be an instance of your OrderQueue and Comparator.   *
          *********************************************************************/
-        return new SimpleOrderQueue<StopSellOrder>(new StopSellOrderComparator(), filter);
+        return new OrderQueueImpl<StopSellOrder>(new StopSellOrderComparator(), filter);
     }
     
     /**
@@ -73,7 +73,7 @@ public class OrderQueueTest extends AbstractOrderQueueTest {
         /*********************************************************************
          * This needs to be an instance of your OrderQueue.                  *
          *********************************************************************/
-        return new SimpleOrderQueue<Order>(filter);
+        return new OrderQueueImpl<Order>(filter);
     }
 
 }

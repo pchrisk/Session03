@@ -9,7 +9,7 @@ import edu.uw.ext.framework.broker.OrderQueue;
 import edu.uw.ext.framework.order.Order;
 import edu.uw.ext.framework.order.StopBuyOrder;
 
-public class SimpleOrderQueue<T extends Order> implements OrderQueue<T> {
+public class OrderQueueImpl<T extends Order> implements OrderQueue<T> {
 	
 	private OrderDispatchFilter<?, T> dispatchFilter;
 	
@@ -18,13 +18,13 @@ public class SimpleOrderQueue<T extends Order> implements OrderQueue<T> {
 	private OrderProcessor orderProcessor;
 	
 
-	public SimpleOrderQueue(OrderDispatchFilter<?, T> filter) {
+	public OrderQueueImpl(OrderDispatchFilter<?, T> filter) {
 		orderQueue = new TreeSet<T>();
 		dispatchFilter = filter;
 		dispatchFilter.setOrderQueue(this);
 	}	
 
-	public SimpleOrderQueue(Comparator<T> compare, OrderDispatchFilter<?, T> filter) {
+	public OrderQueueImpl(Comparator<T> compare, OrderDispatchFilter<?, T> filter) {
 		orderQueue = new TreeSet<>(compare);
 		dispatchFilter = filter;
 		dispatchFilter.setOrderQueue(this);
@@ -33,8 +33,17 @@ public class SimpleOrderQueue<T extends Order> implements OrderQueue<T> {
 
 	@Override
 	public T dequeue() {
-		// TODO Auto-generated method stub
-		return null;
+		T order = null;
+		if (!orderQueue.isEmpty()) {
+			order = orderQueue.first();
+			if (dispatchFilter.check(order)) {
+				orderQueue.remove(order);
+			} else {
+				order = null;
+			}
+		}
+		
+		return order;
 	}
 
 	@Override
@@ -44,21 +53,17 @@ public class SimpleOrderQueue<T extends Order> implements OrderQueue<T> {
 	}
 
 	@Override
-	public void enqueue(T arg0) {
-		// TODO Auto-generated method stub
+	public void enqueue(T order) {
+		orderQueue.add(order);
+		dispatchOrders();
 		
 	}
 
 	@Override
-	public void setOrderProcessor(OrderProcessor arg0) {
+	public void setOrderProcessor(OrderProcessor proc) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void enqueue(E order) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }
