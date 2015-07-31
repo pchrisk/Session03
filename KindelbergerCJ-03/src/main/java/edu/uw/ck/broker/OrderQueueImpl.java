@@ -19,7 +19,7 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T> {
 	
 
 	public OrderQueueImpl(OrderDispatchFilter<?, T> filter) {
-		orderQueue = new TreeSet<T>();
+		orderQueue = new TreeSet<>();
 		dispatchFilter = filter;
 		dispatchFilter.setOrderQueue(this);
 	}	
@@ -48,7 +48,12 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T> {
 
 	@Override
 	public void dispatchOrders() {
-		// TODO Auto-generated method stub
+		T order;
+		while ((order = dequeue()) != null) {
+			if (orderProcessor != null) {
+				orderProcessor.process(order);
+			}	
+		}
 		
 	}
 
@@ -61,7 +66,7 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T> {
 
 	@Override
 	public void setOrderProcessor(OrderProcessor proc) {
-		// TODO Auto-generated method stub
+		orderProcessor = proc;
 		
 	}
 
