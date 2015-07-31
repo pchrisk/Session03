@@ -2,7 +2,8 @@ package edu.uw.ck.broker;
 
 import java.util.HashMap;
 
-import org.junit.internal.runners.model.EachTestNotifier;
+
+//import org.junit.internal.runners.model.EachTestNotifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import edu.uw.ext.framework.broker.Broker;
 import edu.uw.ext.framework.broker.BrokerException;
 import edu.uw.ext.framework.broker.OrderManager;
 import edu.uw.ext.framework.broker.OrderProcessor;
+import edu.uw.ext.framework.broker.OrderQueue;
 import edu.uw.ext.framework.exchange.ExchangeEvent;
 import edu.uw.ext.framework.exchange.ExchangeListener;
 import edu.uw.ext.framework.exchange.StockExchange;
@@ -34,7 +36,7 @@ public class BrokerImpl implements Broker, ExchangeListener {
 	
 	private HashMap<String, OrderManager> orderManagers;
 	
-	private OrderQueueImpl<Order> marketOrders;
+	private OrderQueue<Order> marketOrders;
 	private MarketDispatchfilter marketDispatchFilter;
 	
 	

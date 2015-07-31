@@ -25,10 +25,10 @@ public class OrderManagerImpl implements OrderManager {
 	public OrderManagerImpl(String stockTickerSymbol, int price) {
 		this.stockTickeSymbol = stockTickerSymbol;
 		stopSellOrderFilter = new StopSellOrderDispatchFilter(price);
-		stopSellOrderQueue = new OrderQueueImpl<>(stopSellOrderFilter);
+		stopSellOrderQueue = new OrderQueueImpl<StopSellOrder>(new StopSellOrderComparator(), stopSellOrderFilter);
 		
 		stopBuyOrderFilter = new StopBuyOrderDispatchFilter(price);
-		stopBuyOrderQueue = new OrderQueueImpl<>(stopBuyOrderFilter);
+		stopBuyOrderQueue = new OrderQueueImpl<StopBuyOrder>(new StopBuyOrderComparator(), stopBuyOrderFilter);
 		
 		logger.info("Queues created for " + stockTickerSymbol);
 		
