@@ -10,9 +10,9 @@ import test.DaoTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-					AccountTest.class, 
-					AccountManagerTest.class, 
-					DaoTest.class, 
+//					AccountTest.class, 
+//					AccountManagerTest.class, 
+//					DaoTest.class, 
 					BrokerTest.class})
 public class TestSuite{
 }
