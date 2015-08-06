@@ -5,6 +5,7 @@ import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -23,31 +24,45 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 	
 	private OrderDispatchFilter<?, T> dispatchFilter;
 	
-//	private TreeSet<T> orderQueue;
-	private BlockingQueue<T> orderQueue;
+	private TreeSet<T> orderQueue;
+//	private BlockingQueue<T> orderQueue;
 	
 	private OrderProcessor orderProcessor;
 	
 	private final Lock lock = new ReentrantLock();
 	
-	private AtomicBoolean isQueuedToPool = new AtomicBoolean(false);
+	private final Condition dispatchCondition = lock.newCondition();
+	
+//	private AtomicBoolean isQueuedToPool = new AtomicBoolean(false);
+
+	private Thread dispatchThread;
 	
 	
 
 	public OrderQueueImpl(OrderDispatchFilter<?, T> filter) {
-//		orderQueue = new TreeSet<>();
-		orderQueue = new PriorityBlockingQueue<T>();
+		orderQueue = new TreeSet<>();
+//		orderQueue = new PriorityBlockingQueue<T>();
+		startDispatchThread();
 		dispatchFilter = filter;
 		dispatchFilter.setOrderQueue(this);
-
-		
+				
 	}	
 
+	
+
 	public OrderQueueImpl(Comparator<T> compare, OrderDispatchFilter<?, T> filter) {
-//		orderQueue = new TreeSet<>(compare);
-		orderQueue = new PriorityBlockingQueue<>(10, compare);
+		orderQueue = new TreeSet<>(compare);
+//		orderQueue = new PriorityBlockingQueue<>(10, compare);
+		startDispatchThread();
 		dispatchFilter = filter;
 		dispatchFilter.setOrderQueue(this);
+				
+	}
+	
+	private void startDispatchThread() {
+		dispatchThread = new Thread(this);
+		dispatchThread.setDaemon(true);
+		dispatchThread.start();
 		
 	}
 
@@ -57,11 +72,21 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 			
 			Order order = null;
 			try {
-				order = dequeue();
-					if (order == null) {
-						isQueuedToPool.set(false);
-						break;
+				while ((order = dequeue()) == null) {
+				
+					try {
+						dispatchCondition.await();
+					} catch (InterruptedException e) {
+						logger.error("Problem waiting on thread", e);
+						
 					}
+					
+				}
+//				order = dequeue();
+//					if (order == null) {
+//						isQueuedToPool.set(false);
+//						break;
+//					}
 			} finally {
 				lock.unlock();
 			}
@@ -78,13 +103,13 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 		lock.lock();
 		try {
 			if (!orderQueue.isEmpty()) {
-				order = orderQueue.peek();
+				order = orderQueue.first();
 				if (dispatchFilter.check(order)) {
-					try {
-						orderQueue.take();
-					} catch (InterruptedException e) {
-						logger.error("Error in removing from queue.", e);
-					}
+//					try {
+						orderQueue.remove(order);
+//					} catch (InterruptedException e) {
+//						logger.error("Error in removing from queue.", e);
+//					}
 				} else {
 					order = null;
 				}
@@ -99,13 +124,14 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 	@Override
 	public void dispatchOrders() {
 		lock.lock();
-		T order;
+//		T order;
 		try {
-		while ((order = dequeue()) != null) {
-			if (orderProcessor != null) {
-				orderProcessor.process(order);
-			}	
-		}
+			dispatchCondition.signal();
+//		while ((order = dequeue()) != null) {
+//			if (orderProcessor != null) {
+//				orderProcessor.process(order);
+//			}	
+//		}
 		} finally {
 			lock.unlock();
 		}
@@ -116,9 +142,9 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 	public void enqueue(T order) {
 		lock.lock();
 		try {
-			if (!orderQueue.contains(order)) {
+//			if (!orderQueue.contains(order)) {
 				orderQueue.add(order);
-			}
+//			}
 			
 		} finally {
 			lock.unlock();
