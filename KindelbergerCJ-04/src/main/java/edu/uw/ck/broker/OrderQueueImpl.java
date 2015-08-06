@@ -25,15 +25,12 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 	private OrderDispatchFilter<?, T> dispatchFilter;
 	
 	private TreeSet<T> orderQueue;
-//	private BlockingQueue<T> orderQueue;
 	
 	private OrderProcessor orderProcessor;
 	
 	private final Lock lock = new ReentrantLock();
 	
 	private final Condition dispatchCondition = lock.newCondition();
-	
-//	private AtomicBoolean isQueuedToPool = new AtomicBoolean(false);
 
 	private Thread dispatchThread;
 	
@@ -41,52 +38,39 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 
 	public OrderQueueImpl(OrderDispatchFilter<?, T> filter) {
 		orderQueue = new TreeSet<>();
-//		orderQueue = new PriorityBlockingQueue<T>();
 		startDispatchThread();
 		dispatchFilter = filter;
-		dispatchFilter.setOrderQueue(this);
-				
+		dispatchFilter.setOrderQueue(this);				
 	}	
-
-	
 
 	public OrderQueueImpl(Comparator<T> compare, OrderDispatchFilter<?, T> filter) {
 		orderQueue = new TreeSet<>(compare);
-//		orderQueue = new PriorityBlockingQueue<>(10, compare);
 		startDispatchThread();
 		dispatchFilter = filter;
-		dispatchFilter.setOrderQueue(this);
-				
+		dispatchFilter.setOrderQueue(this);				
 	}
 	
 	private void startDispatchThread() {
 		dispatchThread = new Thread(this);
 		dispatchThread.setDaemon(true);
-		dispatchThread.start();
-		
+		dispatchThread.start();		
 	}
 
-	public void run(){
+	public void run() {
 		while (true) {
 			lock.lock();
-			
+
 			Order order = null;
 			try {
 				while ((order = dequeue()) == null) {
-				
+
 					try {
 						dispatchCondition.await();
 					} catch (InterruptedException e) {
 						logger.error("Problem waiting on thread", e);
-						
 					}
-					
 				}
-//				order = dequeue();
-//					if (order == null) {
-//						isQueuedToPool.set(false);
-//						break;
-//					}
+
 			} finally {
 				lock.unlock();
 			}
@@ -105,11 +89,7 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 			if (!orderQueue.isEmpty()) {
 				order = orderQueue.first();
 				if (dispatchFilter.check(order)) {
-//					try {
-						orderQueue.remove(order);
-//					} catch (InterruptedException e) {
-//						logger.error("Error in removing from queue.", e);
-//					}
+					orderQueue.remove(order);
 				} else {
 					order = null;
 				}
@@ -124,14 +104,8 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 	@Override
 	public void dispatchOrders() {
 		lock.lock();
-//		T order;
 		try {
 			dispatchCondition.signal();
-//		while ((order = dequeue()) != null) {
-//			if (orderProcessor != null) {
-//				orderProcessor.process(order);
-//			}	
-//		}
 		} finally {
 			lock.unlock();
 		}
@@ -142,23 +116,15 @@ public class OrderQueueImpl<T extends Order> implements OrderQueue<T>, Runnable 
 	public void enqueue(T order) {
 		lock.lock();
 		try {
-//			if (!orderQueue.contains(order)) {
-				orderQueue.add(order);
-//			}
-			
+			orderQueue.add(order);
 		} finally {
 			lock.unlock();
 		}
-
 		dispatchOrders();
-		
 	}
 
 	@Override
 	public void setOrderProcessor(OrderProcessor proc) {
-		orderProcessor = proc;
-		
-	}
-
-	
+		orderProcessor = proc;		
+	}	
 }
