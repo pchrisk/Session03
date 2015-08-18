@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import edu.uw.ck.broker.OrderManagerImpl;
 
-public class CommandListner implements Runnable {
+public class CommandHandler implements Runnable {
 	
-	private static Logger logger = LoggerFactory.getLogger(CommandListner.class);
+	private static Logger logger = LoggerFactory.getLogger(CommandHandler.class);
 
-	public CommandListner() {
+	public CommandHandler() {
 		// TODO Auto-generated constructor stub
 	}
 
