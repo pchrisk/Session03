@@ -37,7 +37,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 			int multicastPort, int commandPort) 
 					throws UnknownHostException, SocketException {
 		origExchange = exchng;
-		InetAddress[] mcastGroup = InetAddress.getAllByName(multicastIP);
+		InetAddress mcastGroup = InetAddress.getByName(multicastIP);
 		byte[] buffer = {};
 		try {
 			socket = new MulticastSocket(multicastPort);

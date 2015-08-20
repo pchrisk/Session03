@@ -2,6 +2,7 @@ package edu.uw.ck.exchange;
 
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,15 @@ public class ExchangeNetworkProxy implements StockExchange {
 
 	private static Logger logger = LoggerFactory.getLogger(ExchangeNetworkProxy.class);
 	
+	String commandIpAddress
+	int comandPort
+	NetEventProcessor eventProcessor;
 	
 	public ExchangeNetworkProxy() {
-		// TODO Auto-generated constructor stub
+		commandIpAddress = cmdIpAddress;
+		
+		
+		Executors.newSingleThreadExecutor()
 	}
 
 	@Override
@@ -30,13 +37,17 @@ public class ExchangeNetworkProxy implements StockExchange {
 	@Override
 	public String[] getTickers() {
 		// TODO Auto-generated method stub
-		return null;
+		return tickers;
 	}
 
 	@Override
 	public StockQuote getQuote(String ticker) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		quote = new StockQuote(ticker, price);
+		
+		
+		return quote;
 	}
 
 	@Override
@@ -48,13 +59,33 @@ public class ExchangeNetworkProxy implements StockExchange {
 	@Override
 	public void removeExchangeListener(ExchangeListener l) {
 		// TODO Auto-generated method stub
+		eventProcessor.re
 
 	}
 
 	@Override
 	public int executeTrade(Order order) {
 		// TODO Auto-generated method stub
-		return 0;
+		
+		
+		return executionPrice;
+	}
+	
+	private String sendTcpCmd(String cmd) {
+		inputstram
+		reader
+		bufferedreader
+		
+		outputstream
+		writer
+		prntwrtr = new printwriter
+		
+		prntWrtr.println(cmd);
+		resonse = br.readline();
+		
+		return response;
+		
+		
 	}
 
 }

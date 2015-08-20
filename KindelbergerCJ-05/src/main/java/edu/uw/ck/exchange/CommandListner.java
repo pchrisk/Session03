@@ -10,14 +10,51 @@ public class CommandListner implements Runnable {
 	
 	private static Logger logger = LoggerFactory.getLogger(CommandListner.class);
 
+	
+	private int
+	
+	
 	public CommandListner(int commandPort, StockExchange realExchange) {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		try {
+			
+			servSock = new ServerSocket(commandport);
+			
+			while (listening) {
+				try {
+					sock = servSock.accept();
+				} catch {
+					
+				}
+				
+				if (sock ==null) {
+					continue;
+				}
+				
+				requestExecutor.execute(new CommandHandler(sock, realExchange);
+				
+			
+		} catch {
+			
+		} finally {
+			terminate();
+		}
+		
+			
+		}
 
+	}
+	
+	public void terminate() {
+		listening = fasle;
+		
+		try {
+//			shutdown requestExecutor
+		}
 	}
 
 }
