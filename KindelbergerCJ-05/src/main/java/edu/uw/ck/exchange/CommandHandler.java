@@ -96,7 +96,7 @@ public class CommandHandler implements Runnable {
 					
 					int sharesQty = Integer.parseInt(shares);
 					
-					Order order;
+					Order order = null;
 					
 					switch (ordType) {
 					case SELL_ORDER:

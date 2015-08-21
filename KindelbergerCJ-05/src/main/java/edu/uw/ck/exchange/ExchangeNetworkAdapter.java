@@ -17,6 +17,8 @@ import edu.uw.ext.framework.exchange.ExchangeAdapter;
 import edu.uw.ext.framework.exchange.ExchangeEvent;
 import edu.uw.ext.framework.exchange.StockExchange;
 
+import static edu.uw.ck.exchange.ProtocalConstants.*;
+
 public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	
 	private static Logger logger = LoggerFactory.getLogger(ExchangeNetworkAdapter.class);
@@ -59,7 +61,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	public void exchangeOpened(ExchangeEvent event) {
 		logger.info("Open Event");
 		try {
-			byte[] buffer = ProtocalConstants.OPEN_EVNT.getBytes(ProtocalConstants.ENCODING);
+			byte[] buffer = OPEN_EVNT.getBytes(ENCODING);
 			dgPacket.setData(buffer);
 			dgPacket.setLength(buffer.length);
 			socket.send(dgPacket);
@@ -77,7 +79,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 		byte[] buffer;
 		logger.info("Close Event");
 		try {
-			buffer = ProtocalConstants.CLOSED_EVNT.getBytes(ProtocalConstants.ENCODING);
+			buffer = CLOSED_EVNT.getBytes(ENCODING);
 			dgPacket.setData(buffer);
 			dgPacket.setLength(buffer.length);
 			socket.send(dgPacket);
@@ -97,14 +99,14 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 		String tickerSymbol = event.getTicker();
 		
 		StringBuilder sBuilder = new StringBuilder();
-		sBuilder.append(ProtocalConstants.PRICE_CHG_EVNT);
-		sBuilder.append(ProtocalConstants.ELEMENT_DELIMETER);
+		sBuilder.append(PRICE_CHG_EVNT);
+		sBuilder.append(ELEMENT_DELIMETER);
 		sBuilder.append(tickerSymbol);
-		sBuilder.append(ProtocalConstants.ELEMENT_DELIMETER);
+		sBuilder.append(ELEMENT_DELIMETER);
 		sBuilder.append(price);
 		
 		try {
-			buffer = sBuilder.toString().getBytes(ProtocalConstants.ENCODING);
+			buffer = sBuilder.toString().getBytes(ENCODING);
 			dgPacket.setData(buffer);
 			dgPacket.setLength(buffer.length);
 			socket.send(dgPacket);
@@ -118,7 +120,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	@Override
 	public void close() {
 		origExchange.removeExchangeListener(this);
-//		cmdListner.terminate();
+		cmdListner.terminate();
 		socket.close();
 
 	}
