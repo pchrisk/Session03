@@ -11,7 +11,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
 
-import org.junit.internal.runners.model.EachTestNotifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,12 +55,16 @@ public class CommandHandler implements Runnable {
 			PrintWriter pw = new PrintWriter(osWriter, true);
 
 			String msg = br.readLine();
+			if (msg == null) {
+				msg = "";
+			}
 
 			logger.info("Message recieved: ", msg);
 
 			String[] msgParts = msg.split(ELEMENT_DELIMETER);
 			String cmd = msgParts[CMD_ELEMENT];
 
+			logger.info("Process cmd: ", cmd);
 			int price = 0;
 			String ticker = null;
 

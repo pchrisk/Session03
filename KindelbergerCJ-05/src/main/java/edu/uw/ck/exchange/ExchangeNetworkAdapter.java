@@ -19,6 +19,8 @@ import edu.uw.ext.framework.exchange.StockExchange;
 
 import static edu.uw.ck.exchange.ProtocalConstants.*;
 
+
+
 public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	
 	private static Logger logger = LoggerFactory.getLogger(ExchangeNetworkAdapter.class);
@@ -26,13 +28,13 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	
 	
 
-	private StockExchange origExchange = null;
+	private StockExchange origExchange;
 	
-	private DatagramPacket dgPacket = null;
+	private DatagramPacket dgPacket;
 	
-	private MulticastSocket socket = null;
+	private MulticastSocket socket;
 	
-	private CommandListner cmdListner = null;
+	private CommandListener cmdListener;
 	 
 	
 	public ExchangeNetworkAdapter(StockExchange exchng, String multicastIP, 
@@ -41,6 +43,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 		origExchange = exchng;
 		InetAddress mcastGroup = InetAddress.getByName(multicastIP);
 		byte[] buffer = {};
+		dgPacket = new DatagramPacket(buffer, 0, mcastGroup, multicastPort);
 		try {
 			socket = new MulticastSocket(multicastPort);
 			socket.setSoTimeout(1);
@@ -51,8 +54,8 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 		}
 		
 		
-		cmdListner = new CommandListner(commandPort, origExchange);
-		Executors.newSingleThreadExecutor().execute(cmdListner);
+		cmdListener = new CommandListener(commandPort, origExchange);
+		Executors.newSingleThreadExecutor().execute(cmdListener);
 		
 		origExchange.addExchangeListener(this);
 	}
@@ -61,7 +64,9 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	public void exchangeOpened(ExchangeEvent event) {
 		logger.info("Open Event");
 		try {
+			logger.info(OPEN_EVNT);
 			byte[] buffer = OPEN_EVNT.getBytes(ENCODING);
+			logger.info("Open" + new String(buffer, ENCODING), buffer.length);
 			dgPacket.setData(buffer);
 			dgPacket.setLength(buffer.length);
 			socket.send(dgPacket);
@@ -76,7 +81,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 
 	@Override
 	public void exchangeClosed(ExchangeEvent event) {
-		byte[] buffer;
+		byte[] buffer ;
 		logger.info("Close Event");
 		try {
 			buffer = CLOSED_EVNT.getBytes(ENCODING);
@@ -107,6 +112,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 		
 		try {
 			buffer = sBuilder.toString().getBytes(ENCODING);
+			logger.info(sBuilder.toString());
 			dgPacket.setData(buffer);
 			dgPacket.setLength(buffer.length);
 			socket.send(dgPacket);
@@ -120,7 +126,7 @@ public class ExchangeNetworkAdapter implements ExchangeAdapter {
 	@Override
 	public void close() {
 		origExchange.removeExchangeListener(this);
-		cmdListner.terminate();
+		cmdListener.terminate();
 		socket.close();
 
 	}

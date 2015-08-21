@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import edu.uw.ck.broker.OrderManagerImpl;
 import edu.uw.ext.framework.exchange.StockExchange;
 
-public class CommandListner implements Runnable {
+public class CommandListener implements Runnable {
 	
-	private static Logger logger = LoggerFactory.getLogger(CommandListner.class);
+	private static Logger logger = LoggerFactory.getLogger(CommandListener.class);
 
 	
 	private int cmdPort = 0;
@@ -24,7 +24,7 @@ public class CommandListner implements Runnable {
 	
 	private ExecutorService rqstExecutor = Executors.newCachedThreadPool();
 	
-	public CommandListner(int commandPort, StockExchange realExchange) {
+	public CommandListener(int commandPort, StockExchange realExchange) {
 		cmdPort = commandPort;
 		this.realExchange = realExchange;
 	}
@@ -32,12 +32,15 @@ public class CommandListner implements Runnable {
 	@Override
 	public void run() {
 		try {
+			
 			serverSocket = new ServerSocket(cmdPort);
+			logger.info("Accepting Connections on " + cmdPort);
 			
 			while (listening) {
 				Socket sock = null;
 				
 				sock = serverSocket.accept();
+				logger.info("Socket accepting connections");
 				
 				rqstExecutor.execute(new CommandHandler(sock, realExchange));
 				
