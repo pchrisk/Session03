@@ -32,6 +32,7 @@ public class RmiBrokerServer {
 	private static Logger logger = LoggerFactory.getLogger(RmiBrokerServer.class);
 	
 	public static final String BROKER_NAME = "RTrade";
+	public static final String RMI_SERVER_NAME = "localhost";
 	public static final int RMI_SERVICE_PORT = 11099;
 	
 
