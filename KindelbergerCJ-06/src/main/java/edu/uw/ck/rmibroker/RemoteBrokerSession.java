@@ -1,7 +1,9 @@
 package edu.uw.ck.rmibroker;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
+import edu.uw.ext.framework.broker.BrokerException;
 import edu.uw.ext.framework.exchange.StockQuote;
 
 // TODO: Auto-generated Javadoc
@@ -15,14 +17,14 @@ public interface RemoteBrokerSession extends Remote {
 	 *
 	 * @return the balance
 	 */
-	int getBalance();
+	int getBalance() throws RemoteException;
 
 	// should return the balance of session's account
 
 	/**
 	 * Delete account.
 	 */
-	void deleteAccount();
+	void deleteAccount() throws RemoteException, BrokerException;
 
 	// should delete the session's account
 	
@@ -31,42 +33,42 @@ public interface RemoteBrokerSession extends Remote {
 	 *
 	 * @return the stock quote
 	 */
-	StockQuote requestQuote();
+	StockQuote requestQuote(String ticker) throws RemoteException, BrokerException;
 
 	// obtains the current price of a stock and returns a StockQuote object
 	
 	/**
 	 * Place market buy order.
 	 */
-	void placeMarketBuyOrder();
+	void placeMarketBuyOrder(String ticker, int numberOfShares) throws RemoteException, BrokerException;
 
 	// places a market buy order with the broker
 	
 	/**
 	 * Place market sell order.
 	 */
-	void placeMarketSellOrder();
+	void placeMarketSellOrder(String ticker, int numberOfShares) throws RemoteException, BrokerException;
 
 	// places a market sell order with the broker
 	
 	/**
 	 * Place stop buy order.
 	 */
-	void placeStopBuyOrder();
+	void placeStopBuyOrder(String ticker, int numberOfShares, int price) throws RemoteException, BrokerException;
 
 	// places a stop buy order with the broker
 	
 	/**
 	 * Place stop sell order.
 	 */
-	void placeStopSellOrder();
+	void placeStopSellOrder(String ticker, int numberOfShares, int price) throws RemoteException, BrokerException;
 
 	// places a stop sell order with the broker
 	
 	/**
 	 * Close.
 	 */
-	void close();
+	void close() throws RemoteException;
 	
 	// closes the session and releases any resources
 

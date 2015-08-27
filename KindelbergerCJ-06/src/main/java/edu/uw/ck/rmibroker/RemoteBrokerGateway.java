@@ -1,6 +1,9 @@
 package edu.uw.ck.rmibroker;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+import edu.uw.ext.framework.broker.BrokerException;
 
 public interface RemoteBrokerGateway extends Remote {
 	
@@ -10,7 +13,7 @@ public interface RemoteBrokerGateway extends Remote {
 	 * @return a reference to a remote session
 	 */
 	
-	RemoteBrokerSession createAccount();
+	RemoteBrokerSession createAccount(String userName, String password, int balance) throws RemoteException, BrokerException;
 	
 	
 	/**
@@ -18,6 +21,6 @@ public interface RemoteBrokerGateway extends Remote {
 	 * 
 	 * @return a reference to a remote session
 	 */
-	RemoteBrokerSession login();
+	RemoteBrokerSession login(String userName, String password) throws RemoteException, BrokerException;
 
 }
