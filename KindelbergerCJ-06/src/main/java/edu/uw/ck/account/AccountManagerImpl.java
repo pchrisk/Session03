@@ -42,6 +42,7 @@ public class AccountManagerImpl implements AccountManager {
 			throw new AccountException("Account already exists");
 		} else {
 			byte[] hashedPassword = writeHash(password);
+			logger.debug("Atempting to create Account: " + accountName + password + balance + " ****HASH = " + hashedPassword);
 			Account acct = new AccountFactoryImpl().newAccount(accountName,
 					hashedPassword, balance);
 			acct.registerAccountManager(this);

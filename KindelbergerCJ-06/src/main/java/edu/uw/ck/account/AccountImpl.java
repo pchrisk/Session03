@@ -35,6 +35,8 @@ public class AccountImpl implements Account {
 
 	public AccountImpl(String accountName, byte[] hashedPassword,
 			int initialBalance) throws AccountException {
+		
+		logger.debug("Atempting to create Account: " + accountName + initialBalance + " ****HASH = " + hashedPassword);
 
 		if (initialBalance >= MIN_ACCT_BALANCE) {
 			setName(accountName);

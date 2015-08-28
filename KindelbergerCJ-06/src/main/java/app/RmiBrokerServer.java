@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -17,6 +18,7 @@ import edu.uw.ck.broker.BrokerFactoryImpl;
 import edu.uw.ck.dao.DaoFactoryImpl;
 import edu.uw.ck.rmibroker.RemoteBrokerGateway;
 import edu.uw.ck.rmibroker.RemoteBrokerGatewayImpl;
+import edu.uw.ext.framework.account.AccountException;
 import edu.uw.ext.framework.account.AccountManager;
 import edu.uw.ext.framework.account.AccountManagerFactory;
 import edu.uw.ext.framework.broker.Broker;
@@ -36,21 +38,23 @@ public class RmiBrokerServer {
 	public static final int RMI_SERVICE_PORT = 11099;
 	
 
-	public static void main(final String[] args) throws DaoFactoryException, IOException {
+	public static void main(final String[] args) throws DaoFactoryException, IOException, NotBoundException, AccountException {
 		
 		StockExchange exchange = ExchangeFactory.newTestStockExchange();
 		((StockExchangeSpi)exchange).open();
 		
 		DaoFactory daoFactory = new DaoFactoryImpl();
 		AccountDao dao = daoFactory.getAccountDao();
+		dao.reset();
 		
 		AccountManagerFactory acctMgrFactory = new AccountManagerFactoryImpl();
 		AccountManager acctMgr = acctMgrFactory.newAccountManager(dao);
-		
+		logger.debug("Account MGR: " + acctMgr.toString());
 		BrokerFactory brokerFactory = new BrokerFactoryImpl();
 		Broker broker = brokerFactory.newBroker(BROKER_NAME, acctMgr, exchange);
 		
 		RemoteBrokerGateway remoteGateway = new RemoteBrokerGatewayImpl(broker);
+		logger.debug(String.format("Remote Gateway: %s", remoteGateway.toString()));
 		
 		Registry reg = null;
 		
@@ -58,6 +62,8 @@ public class RmiBrokerServer {
 		logger.info("RMI Server listening on port: " + RMI_SERVICE_PORT);
 		
 		reg.rebind(BROKER_NAME, remoteGateway);
+		
+		logger.info(String.format("Registry: %s", reg.lookup(BROKER_NAME)));
 		logger.info("Remote broker is available for processing.");
 		
 		InputStream is = System.in;

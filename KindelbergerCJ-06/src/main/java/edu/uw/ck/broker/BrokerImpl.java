@@ -99,6 +99,7 @@ public class BrokerImpl implements Broker, ExchangeListener {
 			throws BrokerException {
 		Account account = null;
 		try {
+			logger.debug("Attempting to create Account: " + userName + password + balance);
 			account = acctMgr.createAccount(userName, password, balance);
 		} catch (AccountException e) {
 			throw new BrokerException("Could not create account.", e);
