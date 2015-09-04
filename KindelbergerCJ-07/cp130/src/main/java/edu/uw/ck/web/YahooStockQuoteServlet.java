@@ -2,6 +2,8 @@ package edu.uw.ck.web;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +17,15 @@ public class YahooStockQuoteServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private ServletContext ctx;
 
 	public YahooStockQuoteServlet() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public void init(ServletConfig servletCfg) {
+		ctx = servletCfg.getServletContext();
 	}
 	
 	/**
@@ -37,7 +45,7 @@ public class YahooStockQuoteServlet extends HttpServlet {
     private void serviceRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String symbol = request.getParameter("symbol");
 		YahooQuote quote = YahooQuote.getQuote(symbol);
-		
+		ctx.log("Getting quote for " + symbol);
 		String responseXml = String.format("Symbol: %S \n Price: %S", quote.getSymbol(), quote.getPrice());
 		
 		response.setContentType("text/xml");

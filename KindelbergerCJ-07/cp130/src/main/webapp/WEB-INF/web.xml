@@ -3,5 +3,43 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<display-name>Stock Quote Transform CP130-07</display-name>
+    <filter>
+        <filter-name>QuoteTransformFilter</filter-name>
+        <display-name>QuoteTransformFilter</display-name>
+        <description>Filter using XSLT to format servlet response</description>
+        <filter-class>edu.uw.ck.web.QuoteTransformFilter</filter-class>
+        <init-param>
+            <param-name>htmlXslt</param-name>
+            <param-value>xslt/quote2html.xslt</param-value>
+            <description>HTML transform</description>
+        </init-param>
+        <init-param>
+            <param-name>jsonXslt</param-name>
+            <param-value>xslt/quote2json.xslt</param-value>
+            <description>JSON transform</description>
+        </init-param>
+        <init-param>
+            <param-name>plainXslt</param-name>
+            <param-value>xslt/quote2plain.xslt</param-value>
+            <description>Plain transform</description>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>QuoteTransformFilter</filter-name>
+        <url-pattern>/QuoteServlet</url-pattern>
+    </filter-mapping>
+    <servlet>
+        <servlet-name>StockQuoteServlet</servlet-name>
+        <display-name>StockQuoteServlet</display-name>
+        <description>Servlet requestiong stock quote from Yahoo Financial Services</description>
+        <servlet-class>edu.uw.ck.web.YahooStockQuoteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StockQuoteServlet</servlet-name>
+        <url-pattern>/QuoteServlet</url-pattern>
+    </servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
 </web-app>

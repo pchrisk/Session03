@@ -5,15 +5,15 @@
     <title>Stock Quote Servlet</title>
   </head>
   <body>
-<a href="http://localhost:8080/StockQuote/YahooStockQuoteServet?courtesyType=AAPL&format=html">AAPL (html)</a>
+<a href="http://localhost:8080/StockQuote/QuoteServet?symbol=AAPL&rstype=html">AAPL (html)</a>
 <p>
-<a href="http://localhost:8080/StockQuote/YahooStockQuoteServet?courtesyType=AAPL&format=json">AAPL (json)</a>
+<a href="http://localhost:8080/StockQuote/QuoteServet?symbol=AAPL&rstype=json">AAPL (json)</a>
 <p>
-<a href="http://localhost:8080/StockQuote/YahooStockQuoteServet?courtesyType=AAPL&format=plain">AAPL (plain)</a>
+<a href="http://localhost:8080/StockQuote/QuoteServet?symbol=AAPL&rstype=plain">AAPL (plain)</a>
 <p>
-<a href="http://localhost:8080/StockQuote/YahooStockQuoteServet?courtesyType=AAPL&format=xml">AAPL (xml)</a>
+<a href="http://localhost:8080/StockQuote/QuoteServet?symbol=AAPL&rstype=xml">AAPL (xml)</a>
 
-<form id="get-phrase" action="http://localhost:8080/StockQuote/YahooStockQuoteServet" method="post">
+<form id="get-phrase" action="http://localhost:8080/StockQuote/QuoteServet" method="post">
 Stock Symbol:
 <select name=symbol size=1>
   <option value=aapl>AAPL
@@ -23,10 +23,10 @@ Stock Symbol:
 </select>
 <br>
 Format:
-<input type="radio" name="format" value="html">HTML
-<input type="radio" name="format" value="json" checked>JSON
-<input type="radio" name="format" value="plain">Plain
-<input type="radio" name="format" value="xml">XML
+<input type="radio" name="rstype" value="html">HTML
+<input type="radio" name="rstype" value="json" checked>JSON
+<input type="radio" name="rstype" value="plain">Plain
+<input type="radio" name="rstype" value="xml">XML
 <p> 
 <input type="submit" name="submit_btn" value="Get Quote">
 </form>
